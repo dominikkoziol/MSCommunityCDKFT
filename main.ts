@@ -11,21 +11,19 @@ class MyStack extends TerraformStack {
 
     // define resources here
 
-    new AzurermProvider(this, "MSCommunity", { features: {
-      
-    } });
-    
+    new AzurermProvider(this, "MSCommunity", {features: {} });
+
     const rg = new ResourceGroup(this, "MSCommunityRG", {
       location: "eastus",
       name: "MSCommunityRG"
     })
 
-    const plan = new AppServicePlan(this, "MSCommunityServicePlan",  {
+    const plan = new AppServicePlan(this, "MSCommunityServicePlan", {
       name: "MSCommunityServicePlan",
       kind: "Windows",
       resourceGroupName: rg.name,
       location: rg.location,
-      sku: {tier: "Free", size: "F1"},
+      sku: { tier: "Free", size: "F1" },
       dependsOn: [rg]
     })
 
