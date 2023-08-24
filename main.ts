@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
 import { App, TerraformOutput, TerraformStack } from "cdktf";
-import { AppService } from "@cdktf/provider-azurerm/lib/app-service";
 import { AppServicePlan } from "@cdktf/provider-azurerm/lib/app-service-plan";
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
@@ -28,12 +27,20 @@ class MyStack extends TerraformStack {
       dependsOn: [rg]
     })
 
-    const service1 = new MyAppService(this, "MSCommunityAppServiceId1", "MSCommunityAppServiceId2", rg, plan);
-    const service2 = new MyAppService(this, "MSCommunityAppServiceId1", "MSCommunityAppServiceId2", rg, plan);
-    const service3 = new MyAppService(this, "MSCommunityAppServiceId1", "MSCommunityAppServiceId2", rg, plan);
+    const service1 = new MyAppService(this, "MSCommunityAppServiceId1", "MSCommunityAppService1", rg, plan);
+    const service2 = new MyAppService(this, "MSCommunityAppServiceId2", "MSCommunityAppService2", rg, plan);
+    const service3 = new MyAppService(this, "MSCommunityAppServiceId3", "MSCommunityAppService3", rg, plan);
 
-    new TerraformOutput(this, "OurAppUrl", {
+    new TerraformOutput(this, "OurAppUrl0", {
       value: `https://${service1.name}.azureweb.net/`
+    })
+
+    new TerraformOutput(this, "OurAppUrl1", {
+      value: `https://${service2.name}.azureweb.net/`
+    })
+
+    new TerraformOutput(this, "OurAppUrl2", {
+      value: `https://${service3.name}.azureweb.net/`
     })
   }
 }
