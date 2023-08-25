@@ -4,6 +4,7 @@ import { AppServicePlan } from "@cdktf/provider-azurerm/lib/app-service-plan";
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
 import MyAppService from "./MyAppService";
+import { VirtualNetwork } from "@cdktf/provider-azurerm/lib/virtual-network";
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -11,7 +12,7 @@ class MyStack extends TerraformStack {
 
     // define resources here
 
-    new AzurermProvider(this, "MSCommunity", {features: {} });
+    new AzurermProvider(this, "MSCommunity", { features: {} });
 
     const rg = new ResourceGroup(this, "MSCommunityRG", {
       location: "eastus",
@@ -24,6 +25,15 @@ class MyStack extends TerraformStack {
       resourceGroupName: rg.name,
       location: rg.location,
       sku: { tier: "Free", size: "F1" },
+      dependsOn: [rg]
+    })
+
+    const vn = new VirtualNetwork(this, "vnId1", {
+      name: "MSCommunityVnet",
+      addressSpace: ["10.0.0.0/16"],
+      dnsServers: ["10.0.0.4", "10.0.0.5"],
+      location: rg.location,
+      resourceGroupName: rg.name,
       dependsOn: [rg]
     })
 
